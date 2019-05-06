@@ -1,8 +1,9 @@
-*.iml
-.gradle
-local.properties
 .idea
-.DS_Store
+*.iml
+local.properties
 build
-captures
-.externalNativeBuild
+.gradle
+# Eclipse project files
+.project
+.settings/	
+.classpath
