@@ -34,15 +34,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <com.example.android.architecture.blueprints.todoapp.ScrollChildSwipeRefreshLayout
-            android:id="@+id/refresh_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:onRefreshListener="@{viewmodel::onRefresh}"
-            app:refreshing="@{viewmodel.dataLoading}">
-
             <LinearLayout
+                android:id="@+id/detailLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -111,7 +104,6 @@
 
                 </RelativeLayout>
             </LinearLayout>
-        </com.example.android.architecture.blueprints.todoapp.ScrollChildSwipeRefreshLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_edit_task"
@@ -120,7 +112,7 @@
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_edit"
             app:fabSize="normal"
-            app:layout_anchor="@id/refresh_layout"
+            app:layout_anchor="@id/detailLayout"
             app:layout_anchorGravity="bottom|right|end"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
