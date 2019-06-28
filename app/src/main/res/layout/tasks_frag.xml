@@ -13,8 +13,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -34,73 +35,77 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <com.example.android.architecture.blueprints.todoapp.ScrollChildSwipeRefreshLayout
-            android:id="@+id/refresh_layout"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tasksContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:onRefresh="@{viewmodel}"
-            app:refreshing="@{viewmodel.dataLoading}">
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
 
-            <RelativeLayout
-                android:id="@+id/tasksContainer"
+            <TextView
+                android:id="@+id/filteringLabel"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clickable="true"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/list_item_padding"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/list_item_padding"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:gravity="center_vertical"
+                android:text="@{context.getString(viewmodel.currentFilteringLabel)}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-                <LinearLayout
-                    android:id="@+id/tasksLL"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:visibility="@{viewmodel.empty ? View.GONE : View.VISIBLE}">
+            <ListView
+                android:id="@+id/tasks_list"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                app:items="@{viewmodel.items}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filteringLabel"/>
 
-                    <TextView
-                        android:id="@+id/filteringLabel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/list_item_padding"
-                        android:layout_marginTop="@dimen/activity_vertical_margin"
-                        android:layout_marginRight="@dimen/list_item_padding"
-                        android:layout_marginBottom="@dimen/activity_vertical_margin"
-                        android:gravity="center_vertical"
-                        android:text="@{context.getString(viewmodel.currentFilteringLabel)}"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+            <ImageView
+                android:id="@+id/noTasksIcon"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@{ContextCompat.getDrawable(context, viewmodel.noTaskIconRes)}"
+                app:layout_constraintBottom_toTopOf="@+id/noTasksMain"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-                    <ListView
-                        android:id="@+id/tasks_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:items="@{viewmodel.items}"/>
-                </LinearLayout>
+            <TextView
+                android:id="@+id/noTasksMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{context.getString(viewmodel.noTasksLabel)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/noTasksIcon"/>
 
-                <LinearLayout
-                    android:id="@+id/noTasks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="vertical"
-                    android:visibility="@{viewmodel.empty ? View.VISIBLE : View.GONE}">
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/noTasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewmodel.empty ? View.VISIBLE : View.GONE}"
+                app:constraint_referenced_ids="noTasksIcon,noTasksMain"
+                />
 
-                    <ImageView
-                        android:id="@+id/noTasksIcon"
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:layout_gravity="center"
-                        android:src="@{ContextCompat.getDrawable(context, viewmodel.noTaskIconRes)}"/>
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/tasksLL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{viewmodel.empty ? View.GONE : View.VISIBLE}"
+                app:constraint_referenced_ids="filteringLabel,tasks_list"
+                />
 
-                    <TextView
-                        android:id="@+id/noTasksMain"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="@dimen/list_item_padding"
-                        android:text="@{context.getString(viewmodel.noTasksLabel)}"/>
-                </LinearLayout>
-            </RelativeLayout>
-
-        </com.example.android.architecture.blueprints.todoapp.ScrollChildSwipeRefreshLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_task"
@@ -109,7 +114,7 @@
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_add"
             app:fabSize="normal"
-            app:layout_anchor="@id/refresh_layout"
+            app:layout_anchor="@id/tasksContainer"
             app:layout_anchorGravity="bottom|right|end"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
