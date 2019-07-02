@@ -25,10 +25,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.android.architecture.blueprints.todoapp.EventObserver
 import com.example.android.architecture.blueprints.todoapp.R
+import com.example.android.architecture.blueprints.todoapp.SharedViewModel
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.databinding.TasksFragBinding
 import com.example.android.architecture.blueprints.todoapp.util.getVmFactory
@@ -43,6 +46,9 @@ import java.util.ArrayList
  * Display a grid of [Task]s. User can choose to view all, active or completed tasks.
  */
 class TasksFragment : Fragment() {
+
+
+    private val sharedViewModel by activityViewModels<SharedViewModel>()
 
     private val viewModel by viewModels<TasksViewModel> { getVmFactory() }
 
@@ -89,10 +95,21 @@ class TasksFragment : Fragment() {
         setupRefreshLayout(viewDataBinding.refreshLayout, viewDataBinding.tasksList)
         setupNavigation()
         setupFab()
+        setupSharedViewModel()
 
-        // Always reloading data for simplicity. Real apps should only do this on first load and
-        // when navigating back to this destination. TODO: https://issuetracker.google.com/79672220
-        viewModel.loadTasks(true)
+        // The SharedViewModel helps navigation know when the list should be updated.
+        if (sharedViewModel.tasksListShouldBeUpdated) {
+            viewModel.loadTasks(true)
+        }
+    }
+
+    /**
+     * Reset the SharedViewModel's property.
+     */
+    private fun setupSharedViewModel() {
+        viewModel.items.observe(this, Observer {
+            sharedViewModel.tasksListShouldBeUpdated = false
+        })
     }
 
     private fun setupNavigation() {

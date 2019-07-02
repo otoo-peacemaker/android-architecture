@@ -27,8 +27,9 @@ import com.example.android.architecture.blueprints.todoapp.tasks.TasksViewModel
  * Factory for all ViewModels.
  */
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory constructor(
-        private val tasksRepository: TasksRepository
+class ViewModelFactory(
+    private val tasksRepository: TasksRepository,
+    private val sharedViewModel: SharedViewModel
 ) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>) =
@@ -37,9 +38,9 @@ class ViewModelFactory constructor(
                 isAssignableFrom(StatisticsViewModel::class.java) ->
                     StatisticsViewModel(tasksRepository)
                 isAssignableFrom(TaskDetailViewModel::class.java) ->
-                    TaskDetailViewModel(tasksRepository)
+                    TaskDetailViewModel(tasksRepository, sharedViewModel)
                 isAssignableFrom(AddEditTaskViewModel::class.java) ->
-                    AddEditTaskViewModel(tasksRepository)
+                    AddEditTaskViewModel(tasksRepository, sharedViewModel)
                 isAssignableFrom(TasksViewModel::class.java) ->
                     TasksViewModel(tasksRepository)
                 else ->

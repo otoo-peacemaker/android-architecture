@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.architecture.blueprints.todoapp.Event
 import com.example.android.architecture.blueprints.todoapp.R
+import com.example.android.architecture.blueprints.todoapp.SharedViewModel
 import com.example.android.architecture.blueprints.todoapp.data.Result
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
@@ -35,7 +36,8 @@ import kotlinx.coroutines.launch
  * Fragment's actions listener.
  */
 class TaskDetailViewModel(
-    private val tasksRepository: TasksRepository
+    private val tasksRepository: TasksRepository,
+    private val sharedViewModel: SharedViewModel
 ) : ViewModel() {
 
     private val _task = MutableLiveData<Task>()
@@ -85,6 +87,7 @@ class TaskDetailViewModel(
             tasksRepository.activateTask(task)
             showSnackbarMessage(R.string.task_marked_active)
         }
+        sharedViewModel.tasksListShouldBeUpdated = true
     }
 
     fun start(taskId: String?, forceRefresh: Boolean = false) {

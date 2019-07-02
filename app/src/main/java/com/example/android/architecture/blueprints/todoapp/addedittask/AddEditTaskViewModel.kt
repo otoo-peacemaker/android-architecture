@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.architecture.blueprints.todoapp.Event
 import com.example.android.architecture.blueprints.todoapp.R
+import com.example.android.architecture.blueprints.todoapp.SharedViewModel
 import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
@@ -37,7 +38,8 @@ import kotlinx.coroutines.launch
  * how to deal with more complex scenarios.
  */
 class AddEditTaskViewModel(
-    private val tasksRepository: TasksRepository
+    private val tasksRepository: TasksRepository,
+    private val sharedViewModel: SharedViewModel
 ) : ViewModel() {
 
     // Two-way databinding, exposing MutableLiveData
@@ -126,6 +128,7 @@ class AddEditTaskViewModel(
             val task = Task(currentTitle, currentDescription, taskCompleted, currentTaskId)
             updateTask(task)
         }
+        sharedViewModel.tasksListShouldBeUpdated = true
     }
 
     private fun createTask(newTask: Task) = viewModelScope.launch {
