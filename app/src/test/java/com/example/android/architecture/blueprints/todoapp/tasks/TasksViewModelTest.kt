@@ -101,7 +101,10 @@ class TasksViewModelTest {
 
         // Load tasks
         tasksViewModel.loadTasks(true)
-        // Observe the items to keep LiveData emitting
+
+        // Observe the items to keep LiveData emitting. tasksViewModel.dataLoading is updated
+        // when the switchMap in tasksViewModel.items is executed, which doesn't happen
+        // unless it's observed.
         tasksViewModel.items.observeForTesting {
 
             // Then progress indicator is hidden
@@ -120,7 +123,10 @@ class TasksViewModelTest {
 
         // Load tasks
         tasksViewModel.loadTasks(true)
-        // Observe the items to keep LiveData emitting
+
+        // Observe the items to keep LiveData emitting. tasksViewModel.dataLoading is updated
+        // when the switchMap in tasksViewModel.items is executed, which doesn't happen
+        // unless it's observed.
         tasksViewModel.items.observeForTesting {
 
             // Then progress indicator is hidden
@@ -138,7 +144,10 @@ class TasksViewModelTest {
 
         // Load tasks
         tasksViewModel.loadTasks(true)
-        // Observe the items to keep LiveData emitting
+
+        // Observe the items to keep LiveData emitting. tasksViewModel.dataLoading is updated
+        // when the switchMap in tasksViewModel.items is executed, which doesn't happen
+        // unless it's observed.
         tasksViewModel.items.observeForTesting {
 
             // Then progress indicator is hidden

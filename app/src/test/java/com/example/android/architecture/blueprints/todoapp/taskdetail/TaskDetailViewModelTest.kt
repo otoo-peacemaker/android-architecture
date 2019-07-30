@@ -117,11 +117,9 @@ class TaskDetailViewModelTest {
 
         // Given an initialized ViewModel with an active task
         taskDetailViewModel.start(task.id)
+
         // Get the computed LiveData value
-        taskDetailViewModel.task.observeForTesting {
-            // Then verify that data is not available
-            assertThat(taskDetailViewModel.isDataAvailable.getOrAwaitValue()).isFalse()
-        }
+        assertThat(taskDetailViewModel.isDataAvailable.getOrAwaitValue()).isFalse()
     }
 
     @Test
@@ -161,6 +159,7 @@ class TaskDetailViewModelTest {
 
         // Load the task in the viewmodel
         taskDetailViewModel.start(task.id)
+
         // Start observing to compute transformations
         taskDetailViewModel.task.observeForTesting {
             // Force a refresh to show the loading indicator
