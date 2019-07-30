@@ -19,15 +19,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android.architecture.blueprints.todoapp.MainCoroutineRule
 import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.assertSnackbarMessage
-import com.example.android.architecture.blueprints.todoapp.data.Result.Success
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.FakeRepository
 import com.example.android.architecture.blueprints.todoapp.getOrAwaitValue
 import com.example.android.architecture.blueprints.todoapp.observeForTesting
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert.assertTrue
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -98,22 +96,18 @@ class TaskDetailViewModelTest {
 
         // Load the ViewModel
         taskDetailViewModel.start(task.id)
-        // Start observing to compute transformations
-        taskDetailViewModel.task.observeForTesting {
 
-            // Verify that the task was completed initially
-            assertThat(tasksRepository.tasksServiceData[task.id]?.isCompleted).isTrue()
+        // Verify that the task was completed initially
+        val initialTask = taskDetailViewModel.task.getOrAwaitValue()
+        assertEquals(initialTask?.isCompleted, true)
 
-            // When the ViewModel is asked to complete the task
-            taskDetailViewModel.setCompleted(false)
+        // When the ViewModel is asked to complete the task
+        taskDetailViewModel.setCompleted(false)
 
-            runBlockingTest {
-                // Then the task is not completed and the snackbar shows the correct message
-                val newTask = (tasksRepository.getTask(task.id) as Success).data
-                assertTrue(newTask.isActive)
-                assertSnackbarMessage(taskDetailViewModel.snackbarText, R.string.task_marked_active)
-            }
-        }
+        val newTask = taskDetailViewModel.task.getOrAwaitValue()
+
+        // Then the task is not completed and the snackbar shows the correct message
+        assertEquals(newTask?.isCompleted, false)
     }
 
     @Test
