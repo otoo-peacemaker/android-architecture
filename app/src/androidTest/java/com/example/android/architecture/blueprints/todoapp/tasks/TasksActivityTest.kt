@@ -35,7 +35,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.android.architecture.blueprints.todoapp.R
 import com.example.android.architecture.blueprints.todoapp.R.string
-import com.example.android.architecture.blueprints.todoapp.ServiceLocator
+import com.example.android.architecture.blueprints.todoapp.TodoApplication
 import com.example.android.architecture.blueprints.todoapp.data.Task
 import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
 import com.example.android.architecture.blueprints.todoapp.util.DataBindingIdlingResource
@@ -62,15 +62,17 @@ class TasksActivityTest {
     // An Idling Resource that waits for Data Binding to have no pending bindings
     private val dataBindingIdlingResource = DataBindingIdlingResource()
 
+    private val serviceLocator = (getApplicationContext() as TodoApplication).serviceLocator
+
     @Before
     fun init() {
-        repository = ServiceLocator.provideTasksRepository(getApplicationContext())
+        repository = serviceLocator.provideTasksRepository(getApplicationContext())
         repository.deleteAllTasksBlocking()
     }
 
     @After
     fun reset() {
-        ServiceLocator.resetRepository()
+        serviceLocator.resetRepository()
     }
 
     /**
