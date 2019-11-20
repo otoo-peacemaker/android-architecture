@@ -21,6 +21,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.android.architecture.blueprints.todoapp.Event
@@ -190,21 +191,16 @@ class TasksViewModel @Inject constructor(
     }
 
     private fun filterTasks(tasksResult: Result<List<Task>>): LiveData<List<Task>> {
-        // TODO: This is a good case for liveData builder. Replace when stable.
-        val result = MutableLiveData<List<Task>>()
-
-        if (tasksResult is Success) {
-            isDataLoadingError.value = false
-            viewModelScope.launch {
-                result.value = filterItems(tasksResult.data, currentFiltering)
+        return liveData {
+            if (tasksResult is Success) {
+                isDataLoadingError.value = false
+                emit(filterItems(tasksResult.data, currentFiltering))
+            } else {
+                emit(emptyList())
+                showSnackbarMessage(R.string.loading_tasks_error)
+                isDataLoadingError.value = true
             }
-        } else {
-            result.value = emptyList()
-            showSnackbarMessage(R.string.loading_tasks_error)
-            isDataLoadingError.value = true
         }
-
-        return result
     }
 
     /**
