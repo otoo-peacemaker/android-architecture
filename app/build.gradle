@@ -16,19 +16,6 @@ android {
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
-    android {
-        sourceSets {
-            String sharedTestDir = 'src/sharedTest/java'
-            test {
-                java.srcDirs += sharedTestDir
-                resources.srcDirs += 'src/sharedTest/resources'
-            }
-            androidTest {
-                java.srcDirs += sharedTestDir
-            }
-        }
-    }
-
     buildTypes {
         debug {
             minifyEnabled false
